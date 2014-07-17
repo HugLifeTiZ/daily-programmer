@@ -1,7 +1,4 @@
-require("traceur");
-const _ = require("underscore-contrib");
-_.str = require("underscore.string");
-_.mixin(_.str.exports());
+require("traceur"); require("sugar");
 
 const suits = ["♥", "♦", "♠", "♣"],
  ranks = ["A", 2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"],
@@ -13,7 +10,7 @@ const suits = ["♥", "♦", "♠", "♣"],
 
 class Card {
     static parse (str) {
-        str = _(str.toLowerCase()).words();
+        str = str.toLowerCase().words();
         return new Card(rankStrings[str[0]], suitStrings[str[2]]);
     }
     constructor (rank, suit)  { this.rank = rank; this.suit = suit; }
@@ -24,12 +21,12 @@ class Player {
     static parse (str) {
         var split = str.split(": ");
         return new Player(split[0],
-         ..._(split[1].split(", ")).map(c => Card.parse(c)));
+         ...split[1].split(", ").map(c => Card.parse(c)));
     }
     constructor (name, ...cards) { this.name = name; this.cards = cards; }
     get value () {
         var aces = 0;
-        var retval = _(this.cards).reduce((p, c) => {
+        var retval = this.cards.reduce((p, c) => {
             aces += (c.rank == "A") ? 1 : 0;
             return p += c.value;
         }, 0);
@@ -40,24 +37,26 @@ class Player {
     }
 }
 
-var res = _.chain(require("fs").readFileSync(process.argv[2]).toString())
+var res = require("fs").readFileSync(process.argv[2])
+ .toString()
  .lines()
- .rest(1)
- .filter(line => _.strContains(line, ":"))
+ .slice(1)
+ .filter(line => line.has(":"))
  .each(line => console.log(line))
  .map(Player.parse)
- .sortBy(player => -player.value)
- .value();
+ .sortBy("value")
+ .reverse();
 if (!res[0].value) {
     console.log("Everyone busted. Good job.");
-} else if (res.length > 2 && _.eq(res[0].value, res[1].value, res[2].value)) {
+} else if (res.length > 2 && res[0].value == res[1].value && res[1].value ==
+ res[2].value) {
     console.log("A bunch of people tied.");
 } else if (res[0].value == res[1].value) {
-    console.log(_("%s and %s tied.").sprintf(res[0].name, res[1].name));
+    console.log("{1} and {2} tied.".assign(res[0].name, res[1].name));
 } else if (res[0].value == 99) {
-    console.log(_("%s wins with a five-card trick!").sprintf(res[0].name));
+    console.log("{1} wins with a five-card trick!".assign(res[0].name));
 } else if (res[0].value == 21) {
-    console.log(_("%s wins with Blackjack!").sprintf(res[0].name));
+    console.log("{1} wins with Blackjack!".assign(res[0].name));
 } else {
-    console.log(_("%s wins with %s.").sprintf(res[0].name, res[0].value));
+    console.log("{1} wins with {2}.".assign(res[0].name, res[0].value));
 }
