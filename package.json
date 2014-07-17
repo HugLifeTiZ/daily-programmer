@@ -1,0 +1,21 @@
+{
+  "name": "DailyProgrammer",
+  "version": "0.0.0",
+  "description": "Challenges from /r/DailyProgrammer",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "Trent McPheron",
+    "email": "twilightinzero@gmail.com"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "moment": "^2.7.0",
+    "sprintf-js": "0.0.7",
+    "sugar": "^1.4.1",
+    "traceur": "0.0.49",
+    "underscore-contrib": "~0.3.0",
+    "underscore.string": "~2.3.3"
+  }
+}

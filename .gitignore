@@ -1,0 +1,4 @@
+*.geany
+*.map
+*.bin
+node_modules
