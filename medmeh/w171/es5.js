@@ -72,7 +72,9 @@ const opsMap = {
     "rotatecw" : rotateRight, "rotcw" : rotateRight,
     "rotateleft" : rotateLeft, "rotatel" : rotateLeft,
     "rotateccw" : rotateLeft, "rotccw" : rotateLeft,
-    "zoomin" : zoomIn, "zoomout" : zoomOut
+    "rotr" : rotateRight, "rotl" : rotateLeft,
+    "zoomin" : zoomIn, "zoomout" : zoomOut,
+    "zoom" : zoomIn, "unzoom" : zoomOut
 }
 
 var image = parse(process.argv[2]);

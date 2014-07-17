@@ -19,17 +19,10 @@ class Image {
     invert ()  { this[data] = this[data].map(row => row.map(col => !col)); }
     
     rotate (left) {
-        var temp = this[data][0].map(() => Array(this[data].length));
-        for (var y in this[data]) {
-            for (var x in this[data][y]) {
-                if (left) {
-                    temp[temp.length - x - 1][y] = this[data][y][x];
-                } else {
-                    temp[x][temp[x].length - y - 1] = this[data][y][x];
-                }
-            }
-        }
-        this[data] = temp;
+        this[data] = left ?
+         this[data].map(r => r.reverse()) :
+         this[data].reverse();
+        this[data] = this[data][0].map((_, c) => this[data].map(r => r[c]));
     }
     rotateRight ()  { this.rotate(); }
     rotateLeft ()  { this.rotate(true); }
