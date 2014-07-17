@@ -31,16 +31,15 @@ var Image = function Image(input) {
       }));
     })));
   },
-  rotate: function() {
+  rotate: function(left) {
     "use strict";
-    var dir = arguments[0] !== (void 0) ? arguments[0] : "right";
     var $__0 = this;
     var temp = this[$traceurRuntime.toProperty(data)][0].map((function() {
       return Array($__0[$traceurRuntime.toProperty(data)].length);
     }));
     for (var y in this[$traceurRuntime.toProperty(data)]) {
       for (var x in this[$traceurRuntime.toProperty(data)][$traceurRuntime.toProperty(y)]) {
-        if ($traceurRuntime.toProperty(dir.toLowerCase()) in ["left", "counterclockwise", "ccw"]) {
+        if (left) {
           $traceurRuntime.setProperty(temp[$traceurRuntime.toProperty(temp.length - x - 1)], y, this[$traceurRuntime.toProperty(data)][$traceurRuntime.toProperty(y)][$traceurRuntime.toProperty(x)]);
         } else {
           $traceurRuntime.setProperty(temp[$traceurRuntime.toProperty(x)], temp[$traceurRuntime.toProperty(x)].length - y - 1, this[$traceurRuntime.toProperty(data)][$traceurRuntime.toProperty(y)][$traceurRuntime.toProperty(x)]);
@@ -55,7 +54,7 @@ var Image = function Image(input) {
   },
   rotateLeft: function() {
     "use strict";
-    this.rotate("left");
+    this.rotate(true);
   },
   zoomIn: function() {
     "use strict";
