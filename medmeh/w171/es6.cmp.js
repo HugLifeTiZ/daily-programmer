@@ -34,19 +34,14 @@ var Image = function Image(input) {
   rotate: function(left) {
     "use strict";
     var $__0 = this;
-    var temp = this[$traceurRuntime.toProperty(data)][0].map((function() {
-      return Array($__0[$traceurRuntime.toProperty(data)].length);
-    }));
-    for (var y in this[$traceurRuntime.toProperty(data)]) {
-      for (var x in this[$traceurRuntime.toProperty(data)][$traceurRuntime.toProperty(y)]) {
-        if (left) {
-          $traceurRuntime.setProperty(temp[$traceurRuntime.toProperty(temp.length - x - 1)], y, this[$traceurRuntime.toProperty(data)][$traceurRuntime.toProperty(y)][$traceurRuntime.toProperty(x)]);
-        } else {
-          $traceurRuntime.setProperty(temp[$traceurRuntime.toProperty(x)], temp[$traceurRuntime.toProperty(x)].length - y - 1, this[$traceurRuntime.toProperty(data)][$traceurRuntime.toProperty(y)][$traceurRuntime.toProperty(x)]);
-        }
-      }
-    }
-    $traceurRuntime.setProperty(this, data, temp);
+    $traceurRuntime.setProperty(this, data, left ? this[$traceurRuntime.toProperty(data)].map((function(r) {
+      return r.reverse();
+    })) : this[$traceurRuntime.toProperty(data)].reverse());
+    $traceurRuntime.setProperty(this, data, this[$traceurRuntime.toProperty(data)][0].map((function(_, col) {
+      return $__0[$traceurRuntime.toProperty(data)].map((function(row) {
+        return row[$traceurRuntime.toProperty(col)];
+      }));
+    })));
   },
   rotateRight: function() {
     "use strict";
@@ -58,14 +53,13 @@ var Image = function Image(input) {
   },
   zoomIn: function() {
     "use strict";
-    $traceurRuntime.setProperty(this, data, this[$traceurRuntime.toProperty(data)].reduce((function(prevRow, row) {
-      row = row.reduce((function(prevCol, col) {
-        prevCol.push(col, col);
-        return prevCol;
-      }), []);
-      prevRow.push(row, row);
-      return prevRow;
-    }), []));
+    $traceurRuntime.setProperty(this, data, this[$traceurRuntime.toProperty(data)].map((function(r) {
+      return [r.map((function(c) {
+        return [c, c];
+      })).flatten(1), r.map((function(c) {
+        return [c, c];
+      })).flatten(1)];
+    })).flatten(1));
   },
   zoomOut: function() {
     "use strict";
@@ -94,8 +88,12 @@ var Image = function Image(input) {
       "rotatel": this.rotateLeft,
       "rotateccw": this.rotateLeft,
       "rotccw": this.rotateLeft,
+      "rotr": this.rotateRight,
+      "rotl": this.rotateLeft,
       "zoomin": this.zoomIn,
-      "zoomout": this.zoomOut
+      "zoomout": this.zoomOut,
+      "zoom": this.zoomIn,
+      "unzoom": this.zoomOut
     };
     return ops[$traceurRuntime.toProperty(op)];
   }

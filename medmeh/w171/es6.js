@@ -19,23 +19,17 @@ class Image {
     invert ()  { this[data] = this[data].map(row => row.map(col => !col)); }
     
     rotate (left) {
-        this[data] = left ?
-         this[data].map(r => r.reverse()) :
+        this[data] = left ? this[data].map(row => row.reverse()) :
          this[data].reverse();
-        this[data] = this[data][0].map((_, c) => this[data].map(r => r[c]));
+        this[data] = this[data][0].map((_, col) => this[data].map(
+         row => row[col]));
     }
     rotateRight ()  { this.rotate(); }
     rotateLeft ()  { this.rotate(true); }
     
     zoomIn () {
-        this[data] = this[data].reduce((prevRow, row) => {
-            row = row.reduce((prevCol, col) => {
-                prevCol.push(col, col);
-                return prevCol;
-            }, []);
-            prevRow.push(row, row);
-            return prevRow;
-        }, []);
+        this[data] = this[data].map(row => [r.map(col => [col, col]).flatten(1),
+         row.map(col => [col, col]).flatten(1)]).flatten(1);
     }
     
     zoomOut () {
@@ -59,7 +53,9 @@ class Image {
             "rotatecw" : this.rotateRight, "rotcw" : this.rotateRight,
             "rotateleft" : this.rotateLeft, "rotatel" : this.rotateLeft,
             "rotateccw" : this.rotateLeft, "rotccw" : this.rotateLeft,
-            "zoomin" : this.zoomIn, "zoomout" : this.zoomOut
+            "rotr" : this.rotateRight, "rotl" : this.rotateLeft,
+            "zoomin" : this.zoomIn, "zoomout" : this.zoomOut,
+            "zoom" : this.zoomIn, "unzoom" : this.zoomOut
         }
         return ops[op];
     }
