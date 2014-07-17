@@ -28,22 +28,13 @@ class Image {
     rotateLeft ()  { this.rotate(true); }
     
     zoomIn () {
-        this[data] = this[data].map(row => [r.map(col => [col, col]).flatten(1),
-         row.map(col => [col, col]).flatten(1)]).flatten(1);
+        this[data] = this[data].map(row => [row.map(col => [col, col])
+         .flatten(1), row.map(col => [col, col]).flatten(1)]).flatten(1);
     }
     
     zoomOut () {
-        this[data] = this[data].reduce((prevRow, row, rowIdx) => {
-            if (rowIdx % 2) {
-                prevRow.push(row.reduce((prevCol, col, colIdx) => {
-                    if (colIdx % 2) {
-                        prevCol.push(col);
-                    }
-                    return prevCol;
-                }, []));
-            }
-            return prevRow;
-        }, []);
+        this[data] = this[data].map((row, rIdx) => rIdx % 2 ? row.map(
+         (col, cIdx) => cIdx % 2 ? col : null).compact() : null).compact();
     }
     
     getOp (op) {

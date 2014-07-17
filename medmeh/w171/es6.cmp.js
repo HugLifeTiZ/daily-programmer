@@ -34,8 +34,8 @@ var Image = function Image(input) {
   rotate: function(left) {
     "use strict";
     var $__0 = this;
-    $traceurRuntime.setProperty(this, data, left ? this[$traceurRuntime.toProperty(data)].map((function(r) {
-      return r.reverse();
+    $traceurRuntime.setProperty(this, data, left ? this[$traceurRuntime.toProperty(data)].map((function(row) {
+      return row.reverse();
     })) : this[$traceurRuntime.toProperty(data)].reverse());
     $traceurRuntime.setProperty(this, data, this[$traceurRuntime.toProperty(data)][0].map((function(_, col) {
       return $__0[$traceurRuntime.toProperty(data)].map((function(row) {
@@ -53,27 +53,21 @@ var Image = function Image(input) {
   },
   zoomIn: function() {
     "use strict";
-    $traceurRuntime.setProperty(this, data, this[$traceurRuntime.toProperty(data)].map((function(r) {
-      return [r.map((function(c) {
-        return [c, c];
-      })).flatten(1), r.map((function(c) {
-        return [c, c];
+    $traceurRuntime.setProperty(this, data, this[$traceurRuntime.toProperty(data)].map((function(row) {
+      return [row.map((function(col) {
+        return [col, col];
+      })).flatten(1), row.map((function(col) {
+        return [col, col];
       })).flatten(1)];
     })).flatten(1));
   },
   zoomOut: function() {
     "use strict";
-    $traceurRuntime.setProperty(this, data, this[$traceurRuntime.toProperty(data)].reduce((function(prevRow, row, rowIdx) {
-      if (rowIdx % 2) {
-        prevRow.push(row.reduce((function(prevCol, col, colIdx) {
-          if (colIdx % 2) {
-            prevCol.push(col);
-          }
-          return prevCol;
-        }), []));
-      }
-      return prevRow;
-    }), []));
+    $traceurRuntime.setProperty(this, data, this[$traceurRuntime.toProperty(data)].map((function(row, rIdx) {
+      return rIdx % 2 ? row.map((function(col, cIdx) {
+        return cIdx % 2 ? col : null;
+      })).compact() : null;
+    })).compact());
   },
   getOp: function(op) {
     "use strict";
