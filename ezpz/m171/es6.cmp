@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+require("traceur");
+require("sugar");
+Object.extend();
+process.argv.slice(2).map((function(item) {
+  return parseInt("0x1" + item).toString(2).chars().slice(1).reduce((function(prev, current) {
+    return prev + (current == 1 ? "█" : "░");
+  }), "");
+})).each((function(row) {
+  return console.log(row);
+}));
