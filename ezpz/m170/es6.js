@@ -1,4 +1,4 @@
-require("traceur"); require("sugar");
+require("sugar"); Object.extend();
 
 const values = {"A": 11, "J": 10, "Q": 10, "K": 10},
  ranks = {"ace": "A", "two": 2, "three": 3, "four": 4, "five": 5,

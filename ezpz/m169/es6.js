@@ -1,4 +1,4 @@
-require("traceur"); require("sugar");
+require("sugar"); Object.extend();
 
 var grid = require("fs").readFileSync(process.argv[2])
  .toString().lines().filter(x => x != "").map(y => y.words());

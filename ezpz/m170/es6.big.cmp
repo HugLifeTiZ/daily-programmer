@@ -1,12 +1,22 @@
+#!/usr/bin/env node
 require("traceur");
 require("sugar");
-var values = {
-  "A": 11,
-  "J": 10,
-  "Q": 10,
-  "K": 10
-},
-    ranks = {
+Object.extend();
+var suits = ["♥", "♦", "♠", "♣"],
+    ranks = ["A", 2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"],
+    values = {
+      "A": 11,
+      "J": 10,
+      "Q": 10,
+      "K": 10
+    },
+    suitStrings = {
+      "hearts": 0,
+      "diamonds": 1,
+      "spades": 2,
+      "clubs": 3
+    },
+    rankStrings = {
       "ace": "A",
       "two": 2,
       "three": 3,
@@ -21,42 +31,52 @@ var values = {
       "queen": "Q",
       "king": "K"
     };
-var Card = function Card(str) {
+var Card = function Card(rank, suit) {
   "use strict";
-  this.rank = ranks[$traceurRuntime.toProperty(str.toLowerCase().words()[0])];
+  this.rank = rank;
+  this.suit = suit;
 };
+var $Card = Card;
 ($traceurRuntime.createClass)(Card, {get value() {
     "use strict";
     return values[$traceurRuntime.toProperty(this.rank)] || this.rank;
-  }}, {});
-var Player = function Player(str) {
+  }}, {parse: function(str) {
+    "use strict";
+    str = str.toLowerCase().words();
+    return new $Card(rankStrings[$traceurRuntime.toProperty(str[0])], suitStrings[$traceurRuntime.toProperty(str[2])]);
+  }});
+var Player = function Player(name) {
   "use strict";
-  var split = str.split(": ");
-  this.name = split[0];
-  this.cards = split[1].split(", ").map((function(c) {
-    return new Card(c);
-  }));
+  for (var cards = [],
+      $__1 = 1; $__1 < arguments.length; $__1++)
+    $traceurRuntime.setProperty(cards, $__1 - 1, arguments[$traceurRuntime.toProperty($__1)]);
+  this.name = name;
+  this.cards = cards;
 };
+var $Player = Player;
 ($traceurRuntime.createClass)(Player, {get value() {
     "use strict";
-    var aces = this.cards.filter((function(c) {
-      return c.rank == "A";
-    })).length;
+    var aces = 0;
     var retval = this.cards.reduce((function(p, c) {
+      aces += (c.rank == "A") ? 1 : 0;
       return p += c.value;
     }), 0);
     for (; aces > 0 && retval > 21; aces--) {
       retval -= 10;
     }
     return retval > 21 ? 0 : (this.cards.length > 4 ? 99 : retval);
-  }}, {});
+  }}, {parse: function(str) {
+    "use strict";
+    var split = str.split(": ");
+    return new (Function.prototype.bind.apply($Player, $traceurRuntime.spread([null, split[0]], split[1].split(", ").map((function(c) {
+      return Card.parse(c);
+    })))))();
+  }});
 var res = require("fs").readFileSync(process.argv[2]).toString().lines().slice(1).filter((function(line) {
   return line.has(":");
 })).each((function(line) {
   return console.log(line);
-})).map((function(line) {
-  return new Player(line);
-})).sortBy("value").reverse();
+})).map(Player.parse).sortBy("value").reverse();
 if (!res[0].value) {
   console.log("Everyone busted. Good job.");
 } else if (res.length > 2 && res[0].value == res[1].value && res[1].value == res[2].value) {

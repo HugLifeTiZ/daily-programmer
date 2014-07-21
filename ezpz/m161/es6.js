@@ -1,4 +1,3 @@
-require("traceur");
 const decks = parseInt(process.argv[2]) || 1;
 const attempts = parseInt(process.argv[3]) || decks * 26;
 const suits = ["♥", "♦", "♠", "♣"];

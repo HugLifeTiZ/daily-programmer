@@ -1,5 +1,7 @@
+#!/usr/bin/env node
 require("traceur");
 require("sugar");
+Object.extend();
 var grid = require("fs").readFileSync(process.argv[2]).toString().lines().filter((function(x) {
   return x != "";
 })).map((function(y) {

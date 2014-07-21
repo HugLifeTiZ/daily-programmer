@@ -1,5 +1,7 @@
+#!/usr/bin/env node
 require("traceur");
 require("sugar");
+Object.extend();
 var data = Symbol();
 var Image = function Image(input) {
   "use strict";

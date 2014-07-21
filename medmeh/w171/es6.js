@@ -1,5 +1,4 @@
-require("traceur");
-require("sugar");
+require("sugar"); Object.extend();
 
 const data = Symbol();
 class Image {
