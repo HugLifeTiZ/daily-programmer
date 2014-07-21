@@ -1,0 +1,40 @@
+#!/usr/bin/env node
+require("traceur");
+require("sugar");
+Object.extend();
+var $__0 = $traceurRuntime.assertObject(require("fs")),
+    readFileSync = $__0.readFileSync,
+    writeFileSync = $__0.writeFileSync;
+if (process.argv.length < 3) {
+  console.log("Requires an output filename and then some words.");
+  process.exit(1);
+} else if (process.argv.length < 4) {
+  console.log("Display mode.");
+  console.log("You should use imagemagick display instead or pipe to less.");
+  readFileSync(process.argv[2]).toString().lines().slice(2).map((function(row) {
+    return row.chars().reduce((function(prev, current) {
+      return prev + (current == 1 ? "█" : "░");
+    }), "");
+  })).each((function(row) {
+    return console.log(row);
+  }));
+} else {
+  var font = {};
+  readFileSync("font.txt").toString().lines().add([" ", "0 0 0 0 0", "0 0 0 0 0", "0 0 0 0 0", "0 0 0 0 0", "0 0 0 0 0", "0 0 0 0 0", "0 0 0 0 0"]).inGroupsOf(8).each((function(group) {
+    return $traceurRuntime.setProperty(font, group[0], group.slice(1).map((function(row) {
+      return row.remove(/[ ]/g);
+    })));
+  }));
+  var word = process.argv.slice(3).join(" ").toUpperCase().remove(/[^A-Z ]/g).chars().map((function(letter) {
+    return font[$traceurRuntime.toProperty(letter)];
+  }));
+  word = word[0].map((function(_, index) {
+    return word.map((function(letter) {
+      return letter[$traceurRuntime.toProperty(index)];
+    })).join("0");
+  }));
+  var pix = ["P1", word[0].length + " " + word.length];
+  pix.add(word);
+  writeFileSync(process.argv[2], pix.join("\n"));
+  console.log("Wrote PBM to %s.", process.argv[2]);
+}

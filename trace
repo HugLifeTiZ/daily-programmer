@@ -1,5 +1,6 @@
 #!/bin/bash
 # Compiles ES6 to ES5, adds traceur, adds #! for node, and makes executable.
+set -e
 DIR=$(dirname $(readlink -f "$0"))
 ARGS=("--experimental" "--out" "es6.cmp.js")
 for a in "$@"; do ARGS+=("--script" "$a"); done
