@@ -1,5 +1,7 @@
 #!/usr/bin/env node
-require("traceur");require("sugar");Object.extend();
+require("traceur");
+require("sugar");
+Object.extend();
 var readFileSync = $traceurRuntime.assertObject(require("fs")).readFileSync;
 var $__0 = $traceurRuntime.assertObject(["first.txt", "last.txt"].map((function(file) {
   return readFileSync(file).toString().lines();

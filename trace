@@ -1,0 +1,10 @@
+#!/bin/bash
+# Compiles ES6 to ES5, adds traceur, adds #! for node, and makes executable.
+DIR=$(dirname $(readlink -f "$0"))
+ARGS=("--experimental" "--out" "es6.cmp.js")
+for a in "$@"; do ARGS+=("--script" "$a"); done
+[[ $# -lt 1 ]] && ARGS+=("--script" "es6.js")
+"$DIR/node_modules/traceur/traceur" "${ARGS[@]}"
+sed -i '1s:^:#!/usr/bin/env node\nrequire("traceur");\n:' es6.cmp.js
+chmod +x es6.cmp.js
+mv es6.cmp.js es6.cmp

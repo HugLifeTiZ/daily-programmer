@@ -1,3 +1,4 @@
+require("sugar"); Object.extend();
 const {readFileSync} = require("fs");
 
 const [firsts, lasts] = ["first.txt", "last.txt"].map(file =>
