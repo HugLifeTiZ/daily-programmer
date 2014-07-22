@@ -28,7 +28,7 @@ if (process.argv.length < 3) {
         })));
         return font;
       }), {});
-      var word = process.argv.slice(3).join(" ").toUpperCase().remove(/[^A-Z ]/g).chars().map((function(letter) {
+      var word = process.argv.slice(3).join(" ").remove(/[^A-Za-z0-9 .,!?/:;'"\-_=+@#$%^&*`~\|{}\(\)\[\]\\]/g).chars().map((function(letter) {
         return font[$traceurRuntime.toProperty(letter)];
       }));
       word = word[0].map((function(_, idx) {

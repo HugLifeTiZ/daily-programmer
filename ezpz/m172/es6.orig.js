@@ -23,8 +23,7 @@ if (process.argv.length < 3) {
         font[group[0]] = group.slice(1).map(row => row.remove(/[ ]/g));
         return font;
      }, {});
-    var word = process.argv.slice(3).join(" ")
-     .remove(/[^A-Za-z0-9 .,!?/:;'"\-_=+@#$%^&*`~\|{}\(\)\[\]\\]/g)
+    var word = process.argv.slice(3).join(" ").toUpperCase().remove(/[^A-Z ]/g)
      .chars().map(letter => font[letter]);
     word = word[0].map((_, idx) => word.map(letter => letter[idx]).join("0"));
     var pix = ["P1", word[0].length + " " + word.length].add(word);
