@@ -22,10 +22,12 @@ if (process.argv.length < 3) {
     throw undefined;
   } catch (font) {
     {
-      font = readFileSync("font.txt").toString().lines().add([" ", "0 0 0 0", "0 0 0 0", "0 0 0 0", "0 0 0 0", "0 0 0 0", "0 0 0 0", "0 0 0 0"]).inGroupsOf(8).reduce((function(font, group) {
-        $traceurRuntime.setProperty(font, group[0], group.slice(1).map((function(row) {
-          return row.remove(/[\s]/g);
-        })));
+      font = readFileSync("font.txt").toString().lines().inGroupsOf(8).reduce((function(font, chr) {
+        if (chr.length == 8) {
+          $traceurRuntime.setProperty(font, chr[0] || " ", chr.slice(1).map((function(row) {
+            return row.remove(/[\s]/g);
+          })));
+        }
         return font;
       }), {});
       var word = process.argv.slice(3).join(" ").chars().filter((function(char) {

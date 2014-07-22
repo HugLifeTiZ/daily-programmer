@@ -10,17 +10,11 @@ if (process.argv.length < 3) {
         row.chars().reduce((prev, current) => prev + (current == 1 ? "█" : "░"),
          "")).each(row => console.log(row));
 } else {  // Write mode.
-    const font = readFileSync("font.txt").toString().lines().add([
-        " ",
-        "0 0 0 0",
-        "0 0 0 0",
-        "0 0 0 0",
-        "0 0 0 0",
-        "0 0 0 0",
-        "0 0 0 0",
-        "0 0 0 0"
-     ]).inGroupsOf(8).reduce((font, group) => {
-        font[group[0]] = group.slice(1).map(row => row.remove(/[\s]/g));
+    const font = readFileSync("font.txt").toString().lines().inGroupsOf(8)
+     .reduce((font, chr) => {
+        if (chr.length == 8) {
+            font[chr[0] || " "] = chr.slice(1).map(row => row.remove(/[\s]/g));
+        }
         return font;
      }, {});
     var word = process.argv.slice(3).join(" ").chars()
