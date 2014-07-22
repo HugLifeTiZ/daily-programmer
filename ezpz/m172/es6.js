@@ -12,20 +12,19 @@ if (process.argv.length < 3) {
 } else {  // Write mode.
     const font = readFileSync("font.txt").toString().lines().add([
         " ",
-        "0 0 0 0 0",
-        "0 0 0 0 0",
-        "0 0 0 0 0",
-        "0 0 0 0 0",
-        "0 0 0 0 0",
-        "0 0 0 0 0",
-        "0 0 0 0 0"
+        "0 0 0 0",
+        "0 0 0 0",
+        "0 0 0 0",
+        "0 0 0 0",
+        "0 0 0 0",
+        "0 0 0 0",
+        "0 0 0 0"
      ]).inGroupsOf(8).reduce((font, group) => {
-        font[group[0]] = group.slice(1).map(row => row.remove(/[ ]/g));
+        font[group[0]] = group.slice(1).map(row => row.remove(/[\s]/g));
         return font;
      }, {});
-    var word = process.argv.slice(3).join(" ")
-     .remove(/[^A-Za-z0-9 .,!?/:;'"\-_=+@#$%^&*`~\|{}\(\)\[\]\\]/g)
-     .chars().map(letter => font[letter]);
+    var word = process.argv.slice(3).join(" ").chars()
+     .filter(char => char in font).map(letter => font[letter]);
     word = word[0].map((_, idx) => word.map(letter => letter[idx]).join("0"));
     var pix = ["P1", word[0].length + " " + word.length].add(word);
     writeFileSync(process.argv[2], pix.join("\n"));
