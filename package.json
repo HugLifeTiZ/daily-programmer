@@ -16,6 +16,7 @@
     "sugar": "^1.4.1",
     "traceur": "0.0.49",
     "underscore-contrib": "~0.3.0",
-    "underscore.string": "~2.3.3"
+    "underscore.string": "~2.3.3",
+    "gm": "~1.16.0"
   }
 }
