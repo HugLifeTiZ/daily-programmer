@@ -12,7 +12,7 @@ if (process.argv.length < 3) {
 } else {  // Write mode.
     const font = readFileSync("font.txt").toString().lines().inGroupsOf(8)
      .reduce((font, chr) => {
-        if (chr.length == 8) {
+        if (chr.compact().length == 8) {
             font[chr[0] || " "] = chr.slice(1).map(row => row.remove(/[\s]/g));
         }
         return font;

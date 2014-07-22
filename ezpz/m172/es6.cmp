@@ -23,7 +23,7 @@ if (process.argv.length < 3) {
   } catch (font) {
     {
       font = readFileSync("font.txt").toString().lines().inGroupsOf(8).reduce((function(font, chr) {
-        if (chr.length == 8) {
+        if (chr.compact().length == 8) {
           $traceurRuntime.setProperty(font, chr[0] || " ", chr.slice(1).map((function(row) {
             return row.remove(/[\s]/g);
           })));
