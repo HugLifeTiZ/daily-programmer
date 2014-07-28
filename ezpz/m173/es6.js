@@ -1,11 +1,13 @@
 require("sugar");
 
 const distRatios = [
+    // Meters, inches, miles, then attoparsecs.
     [1.0, 39.3701, 6.21371e-4, 32.4077929],
     [0.0254, 1.0, 1.57828e-5, 0.82315794],
     [1609.34, 63360, 1.0, 52155.287],
     [0.0308567758, 1.21483369, 1.91735116e-5, 1.0]
 ], massRatios = [
+    // Kilograms, pounds, ounces, then hogsheads of beryllium.
     [1.0, 2.20462, 35.274, 2.26912e-3],
     [0.453592, 1.0, 16, 1.02923e-3],
     [0.0283495, 0.0625, 1.0, 6.4328324e-5],
