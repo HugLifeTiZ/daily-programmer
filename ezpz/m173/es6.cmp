@@ -29,21 +29,13 @@ var $__0 = $traceurRuntime.assertObject(process.argv.slice(2).exclude("to")),
     amount = $__0[0],
     fromUnit = $__0[1],
     toUnit = $__0[2];
-if ($traceurRuntime.toProperty(fromUnit) in distMaps) {
-  if ($traceurRuntime.toProperty(toUnit) in distMaps) {
-    console.log("%s %s = %s %s", amount, fromUnit, amount * distRatios[$traceurRuntime.toProperty(distMaps[$traceurRuntime.toProperty(fromUnit)])][$traceurRuntime.toProperty(distMaps[$traceurRuntime.toProperty(toUnit)])], toUnit);
-  } else {
-    console.log("Can't convert %s to %s.", fromUnit, toUnit);
-    process.exit(1);
-  }
-} else if ($traceurRuntime.toProperty(fromUnit) in massMaps) {
-  if ($traceurRuntime.toProperty(toUnit) in massMaps) {
-    console.log("%s %s = %s %s", amount, fromUnit, amount * massRatios[$traceurRuntime.toProperty(massMaps[$traceurRuntime.toProperty(fromUnit)])][$traceurRuntime.toProperty(massMaps[$traceurRuntime.toProperty(toUnit)])], toUnit);
-  } else {
-    console.log("Can't convert %s to %s.", fromUnit, toUnit);
-    process.exit(1);
-  }
+var converted;
+if ($traceurRuntime.toProperty(fromUnit) in distMaps && $traceurRuntime.toProperty(toUnit) in distMaps) {
+  converted = amount * distRatios[$traceurRuntime.toProperty(distMaps[$traceurRuntime.toProperty(fromUnit)])][$traceurRuntime.toProperty(distMaps[$traceurRuntime.toProperty(toUnit)])];
+} else if ($traceurRuntime.toProperty(fromUnit) in massMaps && $traceurRuntime.toProperty(toUnit) in massMaps) {
+  converted = amount * massRatios[$traceurRuntime.toProperty(massMaps[$traceurRuntime.toProperty(fromUnit)])][$traceurRuntime.toProperty(massMaps[$traceurRuntime.toProperty(toUnit)])];
 } else {
-  console.log("Can't convert %s.", fromUnit);
+  console.log("Can't convert %s to %s.", fromUnit, toUnit);
   process.exit(1);
 }
+console.log("%s %s = %s %s", amount, fromUnit, converted, toUnit);

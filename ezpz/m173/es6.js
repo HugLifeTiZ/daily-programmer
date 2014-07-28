@@ -19,23 +19,13 @@ const distRatios = [
 };
 
 const [amount, fromUnit, toUnit] = process.argv.slice(2).exclude("to");
-if (fromUnit in distMaps) {
-    if (toUnit in distMaps) {
-        console.log("%s %s = %s %s", amount, fromUnit,
-         amount * distRatios[distMaps[fromUnit]][distMaps[toUnit]], toUnit);
-    } else {
-        console.log("Can't convert %s to %s.", fromUnit, toUnit);
-        process.exit(1);
-    }
-} else if (fromUnit in massMaps) {
-    if (toUnit in massMaps) {
-        console.log("%s %s = %s %s", amount, fromUnit,
-         amount * massRatios[massMaps[fromUnit]][massMaps[toUnit]], toUnit);
-    } else {
-        console.log("Can't convert %s to %s.", fromUnit, toUnit);
-        process.exit(1);
-    }
+var converted;
+if (fromUnit in distMaps && toUnit in distMaps) {
+    converted = amount * distRatios[distMaps[fromUnit]][distMaps[toUnit]];
+} else if (fromUnit in massMaps && toUnit in massMaps) {
+    converted = amount * massRatios[massMaps[fromUnit]][massMaps[toUnit]];
 } else {
-    console.log("Can't convert %s.", fromUnit);
+    console.log("Can't convert %s to %s.", fromUnit, toUnit);
     process.exit(1);
 }
+console.log("%s %s = %s %s", amount, fromUnit, converted, toUnit);
