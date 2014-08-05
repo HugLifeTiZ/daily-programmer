@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+require("traceur");
+require("sugar");
+var n = parseInt(process.argv[2]);
+console.log("Calculating sequence to iteration %s.", n);
+var seq = [0];
+n.times((function() {
+  return seq.add(seq.map((function(item) {
+    return item === 1 ? 0 : 1;
+  })));
+}));
+console.log(seq.join(""));
