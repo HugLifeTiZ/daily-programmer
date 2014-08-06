@@ -19,7 +19,7 @@ if (process.argv.length < 4) {
           return col == 1 ? true : false;
         }));
       }));
-      var dest = gm(src[0].length, src.length, "#fff").stroke("#000", 1);
+      var dest = gm(src[0].length, src.length, "#fff").fill("#000");
       src.each((function(row, y) {
         return row.each((function(col, x) {
           if (src[$traceurRuntime.toProperty(y)][$traceurRuntime.toProperty(x)])

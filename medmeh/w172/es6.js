@@ -9,7 +9,7 @@ if (process.argv.length < 4) {
     const src = readFileSync(process.argv[2]).toString().lines().slice(2)
      .filter(line => !line.isBlank()).map(row => row.chars()
      .map(col => col == 1 ? true : false))
-    var dest = gm(src[0].length, src.length, "#fff").stroke("#000", 1);
+    var dest = gm(src[0].length, src.length, "#fff").fill("#000");
     src.each((row, y) => row.each((col, x) => { 
         if (src[y][x]) dest.drawPoint(x, y);
     }));
