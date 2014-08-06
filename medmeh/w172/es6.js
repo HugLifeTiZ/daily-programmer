@@ -13,6 +13,6 @@ if (process.argv.length < 4) {
     src.each((row, y) => row.each((col, x) => { 
         if (src[y][x]) dest.drawPoint(x, y);
     }));
-    dest.scale(400, null, "%").blur(1, 1).write(process.argv[3], 
+    dest.scale(400, "%").blur(1, 1).write(process.argv[3], 
      err => err ? console.log(err.toString()) : null);
 }
