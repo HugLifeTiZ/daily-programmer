@@ -14,7 +14,7 @@ const bgColors = [
 
 // The username is the seed for the "RNG".
 var seed = process.argv[2].codes().reduce((prev, cur) => prev + cur, 0);
-function rand(max) {  // Magic random numbers used here.
+function rand (max) {  // Magic random numbers used here.
     seed = (seed * 9301 + 49297) % 233280;
     return (seed / 233280 * max).round();
 }
