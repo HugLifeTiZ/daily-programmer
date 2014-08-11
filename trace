@@ -1,11 +1,11 @@
 #!/bin/bash
 # Compiles ES6 to ES5, adds #! for node, requires traceur, and makes executable.
 set -e
-OUT="es6.cmp"
 while getopts "o:" OPT; do case "$OPT" in
     o) OUT="$OPTARG" ;;
 esac; done
 shift $((OPTIND-1))
+[[ -z "$OUT" ]] && OUT="${1/.js/}" && OUT="${OUT/.es6/}"
 DIR=$(dirname $(readlink -f "$0"))
 ARGS=("--experimental" "--out" "$OUT.js")
 for a in "$@"; do ARGS+=("--script" "$a"); done
