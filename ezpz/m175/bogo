@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+require("traceur");
+require("sugar");
+var iters = 0,
+    $__0 = $traceurRuntime.assertObject(process.argv.slice(2)),
+    mess = $__0[0],
+    target = $__0[1];
+for (; mess != target; iters++)
+  mess = mess.chars().randomize().join("");
+console.log("%s ITERS, THIS IS STUPID", iters);
