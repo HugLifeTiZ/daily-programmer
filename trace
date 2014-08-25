@@ -5,12 +5,15 @@ while getopts "o:" OPT; do case "$OPT" in
     o) OUT="$OPTARG" ;;
 esac; done
 shift $((OPTIND-1))
-[[ -z "$OUT" ]] && OUT="${1/.js/}" && OUT="${OUT/.es6/}"
+#[[ -z "$OUT" ]] && OUT="${1/.js/}" && OUT="${OUT/.es6/}"
+[[ -z "$OUT" ]] && OUT="es6"
 DIR=$(dirname $(readlink -f "$0"))
-ARGS=("--experimental" "--out" "$OUT.js")
+ARGS=("--experimental" "--out" ".trace.js")
 for a in "$@"; do ARGS+=("--script" "$a"); done
-[[ $# -lt 1 ]] && ARGS+=("--script" "es6.js")
+if [[ $# -lt 1 ]]; then
+    for f in *.es6.js; do ARGS+=("--script" "$f"); done
+fi
 "$DIR/node_modules/traceur/traceur" "${ARGS[@]}"
-sed -i '1s:^:#!/usr/bin/env node\nrequire("traceur");\n:' "$OUT.js"
-chmod +x "$OUT.js"
-mv "$OUT.js" "$OUT"
+sed -i '1s:^:#!/usr/bin/env node\nrequire("traceur");\n:' ".trace.js"
+chmod +x ".trace.js"
+mv ".trace.js" "$OUT"
