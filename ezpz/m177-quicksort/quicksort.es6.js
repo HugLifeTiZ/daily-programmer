@@ -8,6 +8,6 @@ function quickSort (list) {
     const pivot = list.sample();
     var smaller = [], bigger = [];
     list.each(item => (item < pivot ? smaller : bigger).add(item));
-    return quickSort(smaller).add(quickSort(bigger)).flatten();
+    return quickSort(smaller).add(quickSort(bigger));
 }
 console.log(quickSort(process.argv.slice(2).map(i => Number(i))).join(" "));

@@ -13,7 +13,7 @@ function quickSort(list) {
   list.each((function(item) {
     return (item < pivot ? smaller : bigger).add(item);
   }));
-  return quickSort(smaller).add(quickSort(bigger)).flatten();
+  return quickSort(smaller).add(quickSort(bigger));
 }
 console.log(quickSort(process.argv.slice(2).map((function(i) {
   return Number(i);
