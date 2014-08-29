@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+require("traceur");
+require("sugar");
+function quickSort(list) {
+  if (list.length <= 1) {
+    return list;
+  } else if (list.length == 2) {
+    return list[1] >= list[0] ? list : [list[1], list[0]];
+  }
+  var pivot = list.sample();
+  var smaller = [],
+      bigger = [];
+  list.each((function(item) {
+    return (item < pivot ? smaller : bigger).add(item);
+  }));
+  return quickSort(smaller).add(quickSort(bigger)).flatten();
+}
+console.log(quickSort(process.argv.slice(2).map((function(i) {
+  return Number(i);
+}))).join(" "));
