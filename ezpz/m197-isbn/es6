@@ -1,0 +1,8 @@
+#!/usr/bin/env node
+require("traceur");
+require("sugar");
+console.log(process.argv[2].remove(/-/g).chars().map((function(char) {
+  return char.toUpperCase() == "X" ? 10 : Number(char);
+})).reduce((function(res, cur, idx) {
+  return res + cur * (10 - idx);
+})) % 11 == 0 ? "Valid ISBN" : "Invalid ISBN");
