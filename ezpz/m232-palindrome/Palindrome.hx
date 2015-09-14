@@ -1,4 +1,4 @@
-import haxe.io.*;
+import haxe.io.Eof;
 import sys.FileSystem;
 import sys.io.File;
 using Lambda;
