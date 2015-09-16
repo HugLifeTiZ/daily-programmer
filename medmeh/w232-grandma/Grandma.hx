@@ -26,19 +26,21 @@ class Grandma {
             exit(1);
         }
         
-        var shortest = { p1: null, p2: null, dist: POSITIVE_INFINITY };
+        var shortest1 = null;
+        var shortest2 = null;
+        var shortest_dist = POSITIVE_INFINITY;
         for (a in 0...(points.length - 1)) {
             for (b in (a + 1)...points.length) {
                 var dist = points[a].distanceFrom(points[b]);
-                if (dist < shortest.dist) {
-                    shortest.p1 = points[a];
-                    shortest.p2 = points[b];
-                    shortest.dist = dist;
+                if (dist < shortest_dist) {
+                    shortest1 = points[a];
+                    shortest2 = points[b];
+                    shortest_dist = dist;
                 }
             }
         }
         
-        println('${shortest.p1} ${shortest.p2}');
+        println('$shortest1 $shortest2');
     }
 }
 
