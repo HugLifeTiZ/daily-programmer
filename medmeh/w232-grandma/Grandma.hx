@@ -1,29 +1,25 @@
-import haxe.io.Eof;
-import sys.io.File;
 import Math.*;
-import Sys.*;
-import Std.*;
 
 class Grandma {
     static var pointReg = ~/^\((-?[\d]+\.[\d]+),\s?(-?[\d]+\.[\d]+)\)$/;
     
     static function main () {
-        var file = File.read(args()[0]);
+        var file = sys.io.File.read(Sys.args()[0]);
         
         var points = [];
         try {
             while (true) {
                 if (pointReg.match(file.readLine())) {
                     points.push(new Point(
-                     parseFloat(pointReg.matched(1)),
-                     parseFloat(pointReg.matched(2))));
+                     Std.parseFloat(pointReg.matched(1)),
+                     Std.parseFloat(pointReg.matched(2))));
                 }
             }
-        } catch (e:Eof) { }
+        } catch (e:haxe.io.Eof) { }
         
         if (points.length < 1) {
-            println("No points given.");
-            exit(1);
+            Sys.println("No points given.");
+            Sys.exit(1);
         }
         
         var shortest1 = null;
@@ -40,7 +36,7 @@ class Grandma {
             }
         }
         
-        println('$shortest1 $shortest2');
+        Sys.println('$shortest1 $shortest2');
     }
 }
 
