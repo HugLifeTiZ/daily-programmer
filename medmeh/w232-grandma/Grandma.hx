@@ -7,15 +7,13 @@ class Grandma {
         var file = sys.io.File.read(Sys.args()[0]);
         
         var points = [];
-        try {
-            while (true) {
-                if (pointReg.match(file.readLine())) {
-                    points.push(new Point(
-                     Std.parseFloat(pointReg.matched(1)),
-                     Std.parseFloat(pointReg.matched(2))));
-                }
+        try while (true) {
+            if (pointReg.match(file.readLine())) {
+                points.push(new Point(
+                 Std.parseFloat(pointReg.matched(1)),
+                 Std.parseFloat(pointReg.matched(2))));
             }
-        } catch (e:haxe.io.Eof) { }
+        } catch (_:haxe.io.Eof) { }
         
         if (points.length < 1) {
             Sys.println("No points given.");
@@ -40,19 +38,12 @@ class Grandma {
     }
 }
 
-class Point {
-    public var x (default, null): Float;
-    public var y (default, null): Float;
+@:tink class Point {
+    public var x (default, null): Float = _;
+    public var y (default, null): Float = _;
     
-    public function new (x, y) {
-        this.x = x; this.y = y;
-    }
-    
-    public function distanceFrom (that: Point) {
+    public function distanceFrom (that: Point)
         return sqrt(pow(this.x - that.x, 2) + pow(this.y - that.y, 2));
-    }
     
-    public function toString () {
-        return '(${this.x},${this.y})';
-    }
+    public function toString () return '(${this.x}, ${this.y})';
 }
