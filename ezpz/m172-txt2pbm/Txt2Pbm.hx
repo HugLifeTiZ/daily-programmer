@@ -13,11 +13,11 @@ class Txt2Pbm {
               prev + (cur == "1" ? "█" : "░"), ""))) Sys.println(row);
         default:
             var font = new Map<String, Array<String>>();
-            for (c in sys.io.File.getContent("font.txt").toLines().groupsOf(8))
+            for (c in sys.io.File.getContent("font.txt").toLines().splitBy(8))
                 if (c.compact().length == 8)
                     font[c[0].ifEmpty(" ")] = c.rest().map.fn(_.remove(" "));
             var word = Sys.args().rest().join(" ").toArray().filter.fn(
-             font.keys().toArray().indexOf(_) >= 0).map.fn(font[_]);
+             font.keys().toArray().contains(_)).map.fn(font[_]);
             var out = word[0].mapi.fn([foo, idx] => word.map.fn(
              letter => letter[idx]).join("0"));
             var pix = ["P1", out[0].length + " " + out.length].concat(out);
