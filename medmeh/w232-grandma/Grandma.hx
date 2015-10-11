@@ -1,28 +1,25 @@
-import Math.*;
+using Thx;
 
 class Grandma {
     static var pointReg = ~/^\((-?[\d]+\.[\d]+),\s?(-?[\d]+\.[\d]+)\)$/;
     
     static function main () {
-        var file = sys.io.File.read(Sys.args()[0]);
-        
         var points = [];
-        try while (true) {
-            if (pointReg.match(file.readLine())) {
+        for (line in sys.io.File.getContent(Sys.args()[0]).toLines()) {
+            if (pointReg.match(line)) {
                 points.push(new Point(
-                 Std.parseFloat(pointReg.matched(1)),
-                 Std.parseFloat(pointReg.matched(2))));
+                 pointReg.matched(1).toFloat(),
+                 pointReg.matched(2).toFloat()));
             }
-        } catch (_:haxe.io.Eof) { }
+        }
         
         if (points.length < 1) {
             Sys.println("No points given.");
             Sys.exit(1);
         }
         
-        var shortest1 = null;
-        var shortest2 = null;
-        var shortest_dist = POSITIVE_INFINITY;
+        var shortest1 = null, shortest2 = null, 
+         shortest_dist = Math.POSITIVE_INFINITY;
         for (a in 0...(points.length - 1)) {
             for (b in (a + 1)...points.length) {
                 var dist = points[a].distanceFrom(points[b]);
@@ -43,7 +40,7 @@ class Grandma {
     public var y (default, null): Float = _;
     
     public function distanceFrom (that: Point)
-        return sqrt(pow(this.x - that.x, 2) + pow(this.y - that.y, 2));
+        return ((this.x - that.x).pow(2) + (this.y - that.y).pow(2)).sqrt();
     
     public function toString () return '(${this.x}, ${this.y})';
 }
