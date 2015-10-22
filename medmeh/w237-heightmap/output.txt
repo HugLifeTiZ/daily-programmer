@@ -49,3 +49,7 @@ TiZLappy:w237-heightmap$ ./HeightMap-cpp diag3.txt
 |#+-++-++-+#|
 |###########|
 +-----------+
+WC130-TiZ:w237-heightmap$ ./HeightMap-cpp diag4.txt
++-+ +-+
+|#| |#|
++-+ +-+
