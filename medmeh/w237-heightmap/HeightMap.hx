@@ -14,7 +14,7 @@ class HeightMap {
             Sys.println(line.join(""));
     }
     
-    static function paintBox (x1:Int, y1:Int, x2:Int, y2:Int, layer:Int) {
+    static function paintBox (x1, y1, x2, y2, layer) {
         var boxes: Array<Box> = [];
         for (y in (y1 + 1) ... y2)
             for (x in (x1 + 1) ... x2)
