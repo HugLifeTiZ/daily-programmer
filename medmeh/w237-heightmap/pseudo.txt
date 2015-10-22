@@ -1,0 +1,19 @@
+Read in the map
+
+Find boxes:
+    Iterate through pixels within the box.
+        Found a +! Is this part of a box we already have? If not:
+            Go right until found another +.
+            Go down until found another +.
+            Derive x1, y1, x2, y2 from these.
+            Layer is current box's layer + 1.
+            Add box to array of boxes.
+        Found a - or a |.
+            This is a box bound and is not especially notable.
+            Leave it alone.
+        Found a space.
+            Is this part of one of the child boxes?
+            Yes:
+                Leave it alone for now.
+            No:
+                Paint it.
