@@ -9,12 +9,12 @@ class HeightMap {
     static function main () {
         map = sys.io.File.getContent(Sys.args()[0]).toLines()
          .filter.fn(~/^[\|\+\- ]+$/.match(_)).map.fn(_.toArray());
-        paintBoxes(0, 0, map[0].length - 1, map.length - 1, 0);
+        paintBox(0, 0, map[0].length - 1, map.length - 1, 0);
         for (line in map)
             Sys.println(line.join(""));
     }
     
-    static function paintBoxes (x1:Int, y1:Int, x2:Int, y2:Int, layer:Int) {
+    static function paintBox (x1:Int, y1:Int, x2:Int, y2:Int, layer:Int) {
         var boxes: Array<Box> = [];
         for (y in (y1 + 1) ... y2)
             for (x in (x1 + 1) ... x2)
@@ -30,7 +30,7 @@ class HeightMap {
                         map[y][x] = layer < 4 ? layers[layer] : " ";
                     }
         for (box in boxes)
-            paintBoxes(box.x1, box.y1, box.x2, box.y2, box.layer);
+            paintBox(box.x1, box.y1, box.x2, box.y2, box.layer);
     }
     
     inline static function inBox (x, y, box)
