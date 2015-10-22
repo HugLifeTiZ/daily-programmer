@@ -16,23 +16,19 @@ class HeightMap {
     
     static function paintBoxes (x1:Int, y1:Int, x2:Int, y2:Int, layer:Int) {
         var boxes: Array<Box> = [];
-        for (y in (y1 + 1) ... y2) {
-            for (x in (x1 + 1) ... x2) {
-                switch (map[y][x]) {
-                case "+":
-                    if (!boxes.any.fn(inBox(x, y, _))) {
+        for (y in (y1 + 1) ... y2)
+            for (x in (x1 + 1) ... x2)
+                if (!boxes.any.fn(inBox(x, y, _)))
+                    switch (map[y][x]) {
+                    case "+":
                         var tx = x + 1, ty = y + 1;
                         while (map[y][tx] != "+") tx++;
                         while (map[ty][x] != "+") ty++;
                         boxes.push({x1: x, y1: y, x2: tx, y2: ty,
                          layer: layer + 1});
-                    }
-                case " ":
-                    if (!boxes.any.fn(inBox(x, y, _)))
+                    case " ":
                         map[y][x] = layer < 4 ? layers[layer] : " ";
-                }
-            }
-        }
+                    }
         for (box in boxes)
             paintBoxes(box.x1, box.y1, box.x2, box.y2, box.layer);
     }
