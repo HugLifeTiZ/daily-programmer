@@ -1,30 +1,24 @@
-import std.stdio, std.regex, std.conv, std.math;
+import std.stdio, std.regex, std.conv, std.math,
+ std.algorithm, std.array, std.format;
 
 struct Point {
-    public double x;
-    public double y;
-    public string toString () {
-        return "(" ~ x.to!string ~ ", " ~ y.to!string ~ ")";
-    }
-    public double distanceFrom (Point that) {
+    double x, y;
+    string toString () { return "(%.14f, %.14f)".format(x, y); }
+    auto distanceFrom (Point that) {
         return sqrt((x - that.x) ^^ 2 + (y - that.y) ^^ 2);
     }
 }
 
 void main () {
-    auto pointReg = ctRegex!(`\((-?[\d]+\.[\d]+),\s*(-?[\d]+\.[\d]+)\)`);
-    Point[] points;
-    foreach (line; stdin.byLine) {
-        auto match = line.matchFirst(pointReg);
-        if (!match.empty) {
-            points ~= Point(match[1].to!double, match[2].to!double);
-        }
-    }
+    auto reg = ctRegex!(`\((-?[\d]+\.[\d]+),\s*(-?[\d]+\.[\d]+)\)`);
+    auto points = stdin.byLineCopy.map!(a => a.matchFirst(reg))
+     .filter!(a => !a.empty).map!(a => Point(a[1].to!double, a[2].to!double))
+     .array;
     
-    Point shortest1 = Point(0,0), shortest2 = Point(0,0);
+    auto shortest1 = Point(0,0), shortest2 = Point(0,0);
     auto shortest_dist = double.infinity;
-    for (auto a = 0; a < points.length - 1; ++a) {
-        for (auto b = (a + 1); b < points.length - 2; ++b) {
+    for (auto a = 0; a < points.length - 2; ++a) {
+        for (auto b = (a + 1); b < points.length - 1; ++b) {
             auto dist = points[a].distanceFrom(points[b]);
             if (dist < shortest_dist) {
                 shortest1 = points[a];
