@@ -8,10 +8,10 @@ struct Box {
 }
 
 void main (string[] args) {
-    auto grid = stdin.byLine.map!"a.idup"
-     .filter!(a => a.matchFirst(ctRegex!(`^[\|\+\- ]+$`))).map!"a.dup".array;
+    auto reg = ctRegex!(`^[\|\+\- ]+$`);
+    auto grid = stdin.byLineCopy.filter!(a => a.matchFirst(reg)).map!dup.array;
     grid.paintBox(Box(0, 0, grid[0].length, grid.length, 0));
-    foreach (char[] line; grid) writeln(line);
+    grid.each!writeln;
 }
 
 void paintBox (char[][] grid, Box box) {
@@ -31,6 +31,5 @@ void paintBox (char[][] grid, Box box) {
                     break;
                 default: break;
     }   }   }   }
-    foreach (Box b; boxes)
-        grid.paintBox(Box(b.x1 + 1, b.y1 + 1, b.x2, b.y2, b.layer));
+    boxes.each!(a => grid.paintBox(Box(++a.x1, ++a.y1, a.x2, a.y2, a.layer)));
 }
