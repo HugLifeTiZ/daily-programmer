@@ -1,4 +1,4 @@
-import std.stdio, std.algorithm, std.array, std.regex, std.string;
+import std.stdio, std.algorithm, std.array, std.regex;
 
 struct Box { ulong x1, y1, x2, y2, layer; }
 
