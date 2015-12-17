@@ -9,9 +9,13 @@ struct Box {
 
 void main (string[] args) {
     auto reg = ctRegex!(`^[\|\+\- ]+$`);
-    auto grid = stdin.byLineCopy.filter!(a => a.matchFirst(reg)).map!dup.array;
-    grid.paintBox(Box(0, 0, grid[0].length, grid.length, 0));
-    grid.each!writeln;
+    auto files = args[1..$].map!(a => File(a, "r")).array;
+    if (!files.length) files = [stdin];
+    foreach (File f; files) {
+        auto grid = f.byLineCopy.filter!(a => a.matchFirst(reg)).map!dup.array;
+        grid.paintBox(Box(0, 0, grid[0].length, grid.length, 0));
+        grid.each!writeln;
+    }
 }
 
 void paintBox (char[][] grid, Box box) {
