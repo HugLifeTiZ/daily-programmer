@@ -1,21 +1,21 @@
-import std.stdio, std.algorithm, std.array, std.conv, std.random, std.string;
+import std.stdio, std.algorithm, std.range, std.conv, std.random, std.string;
 
 void main () {
     auto diff = getDiff();
     auto count = [5, 8, 10, 12, 15][diff], len = [4, 7, 9, 12, 15][diff];
     auto words = File("enable1.txt", "r").byLineCopy.map!chomp
      .filter!(a => a.length == len).array.randomSample(count).map!toUpper.array;
-    auto target = words.randomSample(1).array[0].dup;
     words.each!writeln;
+    auto target = words.randomSample(1).front;
     auto matches = 0, tries = 5;
     while (tries-- > 0 && len > (matches = getMatches(target)))
         writeln("You got %s/%s. %s tries remain.".format(matches, len, tries));
     writeln(len == matches ? "Access granted." : "ACCESS DENIED");
 }
 
-auto getMatches (char[] target) {
+auto getMatches (string target) {
     write("Make a guess: ");
-    auto guess = stdin.readln.chomp.toUpper.dup, matches = 0;
+    auto guess = stdin.readln.chomp.toUpper, matches = 0;
     for (auto i = 0; i < min(target.length, guess.length); ++i)
         if (target[i] == guess[i]) ++matches;
     return matches;
