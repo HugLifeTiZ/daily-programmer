@@ -1,4 +1,4 @@
-import std.stdio, std.conv, std.algorithm;
+import std.stdio, std.conv, std.algorithm, std.string;
 
 void main (string[] args) {
     auto target = args[1].to!int;
@@ -9,7 +9,7 @@ void main (string[] args) {
         }
         if (seq[$ - 1] == target) {
             writeln("Target reached with f(1) = ", i, ".");
-            writeln(seq.map!(to!string).reduce!"a ~ \" \" ~ b");
+            writeln(seq.map!(to!string).join(" "));
             break;
         }
     }
