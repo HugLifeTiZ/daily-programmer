@@ -1,5 +1,5 @@
 import std.stdio, std.regex, std.conv, std.math,
- std.algorithm, std.array, std.format;
+ std.algorithm, std.array, std.range, std.format;
 
 struct Point {
     double x, y;
@@ -9,9 +9,11 @@ struct Point {
     }
 }
 
-void main () {
+void main (string[] args) {
     auto reg = ctRegex!(`\((-?[\d]+\.[\d]+),\s*(-?[\d]+\.[\d]+)\)`);
-    auto points = stdin.byLineCopy.map!(a => a.matchFirst(reg))
+    auto files = args[1..$].map!(a => File(a, "r")).array;
+    if (!files.length) files = [stdin];
+    auto points = files.map!"a.byLineCopy".join.map!(a => a.matchFirst(reg))
      .filter!(a => !a.empty).map!(a => Point(a[1].to!double, a[2].to!double))
      .array;
     
