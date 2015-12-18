@@ -3,10 +3,9 @@ import std.stdio, std.algorithm, std.range, std.conv, std.random, std.string;
 void main () {
     auto diff = getDiff();
     auto count = [5, 8, 10, 12, 15][diff], len = [4, 7, 9, 12, 15][diff];
-    auto words = File("enable1.txt", "r").byLineCopy.map!chomp
-     .filter!(a => a.length == len).array.randomSample(count).map!toUpper.array;
-    words.each!writeln;
-    auto target = words.randomSample(1).front;
+    auto target = File("enable1.txt", "r").byLineCopy.map!chomp
+     .filter!(a => a.length == len).array.randomSample(count).map!toUpper
+     .tee!writeln.array.randomSample(1).front;
     auto matches = 0, tries = 5;
     while (tries-- > 0 && len > (matches = getMatches(target)))
         writeln("You got %s/%s. %s tries remain.".format(matches, len, tries));
