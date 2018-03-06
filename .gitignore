@@ -2,9 +2,12 @@
 *.map
 *.bin
 *.n
+*.o
 *.x86
 *.x64
 *.x86_64
+*-cpp
+*-neko
 cpp.bld
 .hxcpp
 node_modules
