@@ -1,0 +1,3 @@
+I did this one by iterating through subsets from the bottom upward and potentially doing two flips per subset. If the back of the subset is already the largest number in it, then do nothing. If the largest number is in the middle, flip from that index. And then flip the entire subset.
+
+Most of the iteration is going through the subsets and then finding the biggest number, so I guess runtime is O(n²).
