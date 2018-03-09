@@ -15,14 +15,14 @@ failure () {
 run_tests () {
     dirname=$(basename "$PWD")
     exercise=${1:-${dirname##*-}}
-    output=$(tail -n +2 <<<"$output")
+    output=$(tail -n +2 <<< "$output")
     
     if [[ ! "$quiet" ]]; then
         header Testing "$exercise"
         header Input arguments are:
         echo "${inputs[@]}"
         header Expected result is:
-        cat <<<"$output"
+        cat <<< "$output"
     fi
     
     for file in $exercise.*; do
@@ -47,13 +47,26 @@ run_tests () {
     done
 }
 
+passed_test () {
+    if [[ "$exact_match" ]]; then
+        [[ "$result" == "$output" ]]
+    else
+        # Make sure all the lines in the output are there.
+        retval=0
+        while read -r line; do
+            if ! grep -Eq -e "$line" <<< "$result"; then retval=1; fi
+        done <<< "$output"
+        return "$retval"
+    fi
+}
+
 do_test () {
     start=$(date +%s.%N)
     result=$("$@" "${inputs[@]}")
-    cat <<<"$result"
+    cat <<< "$result"
     end=$(date +%s.%N)
-    runtime=$(bc -l <<<"$end - $start")
-    if [[ "$result" == "$output" ]]; then
+    runtime=$(bc -l <<< "$end - $start")
+    if passed_test; then
         success "Program passed test in ${runtime}s"
     else
         failure "Program FAILED test in ${runtime}s"
