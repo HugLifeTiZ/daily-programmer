@@ -33,32 +33,36 @@ run_tests () {
         puts "$output"
     fi
     
+    fails=""
+    
     for file in "$exercise."*; do
     case "${file##*.}" in
         cr) if check_lang cr crystal; then
             header Building Crystal program
             crystal build -o "crystal.bin" "$file"
-            header Testing Crystal program
-            do_test "./crystal.bin"
+            do_test Crystal "./crystal.bin"
             fi ;;
         d) if check_lang d; then
             header Building D program
             ldc2 -of "ldc2.bin" "$file"
-            header Testing D program
-            do_test "./ldc2.bin"
+            do_test D "./ldc2.bin"
             fi ;;
         cs) if check_lang cs csharp; then
             header Building C\# program
             mcs -out:cs.exe "$file"
-            header Testing C\# program
-            do_test mono "./cs.exe"
+            do_test 'C#' mono "./cs.exe"
             fi ;;
         rb) if check_lang rb ruby; then
-            header Testing Ruby program
-            do_test ruby "$file"
+            do_test Ruby ruby "$file"
             fi ;;
     esac
     done
+    
+    if [ "$fails" ]; then
+        failure The following langs failed: $fails
+    else
+        success All langs passed\!
+    fi
 }
 
 passed_test () {
@@ -86,6 +90,8 @@ EOF
 }
 
 do_test () {
+    current_lang="$1"; shift
+    header Testing "$current_lang" program
     start=$(date +%s.%N)
     result=$(exec_lines "$@")
     #eval 'result=$("$@" '"$inputs"')'
@@ -96,6 +102,7 @@ do_test () {
         success "Program passed test in ${runtime}s"
     else
         failure "Program FAILED test in ${runtime}s"
+        fails="$fails $current_lang"
     fi
 }
 
@@ -106,4 +113,4 @@ while getopts ql: OPT; do case "$OPT" in
     *) true ;;  # Just ignore nonsense options.
 esac; done; shift $((OPTIND - 1))
 
-run_tests "$@"
+run_tests "$@" 2>&1 | tee results.txt
