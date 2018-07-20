@@ -5,6 +5,6 @@ void main (string[] args) {
         a => ('1' ~ a)
          .to!int(16)
          .to!string(2)
-         .map!"a == '1' ? '█' : '░'"
+         .map!`a == '1' ? '█' : '░'`
      ).each!writeln;
 }
