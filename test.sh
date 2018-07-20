@@ -22,18 +22,16 @@ check_lang () {
 run_tests () {
     dirname=$(basename "$PWD")
     exercise=${1:-${dirname##*-}}
-    inputs=$(puts "$inputs" | sed '/./,$!d')
+    args=$(puts "$args" | sed '/./,$!d')
     output=$(puts "$output" | tac | sed '/./,$!d' | tac | sed '/./,$!d')
     
     if [ ! "${quiet:-}" ]; then
         header Testing "$exercise"
         header Input arguments are:
-        puts "$inputs"
+        puts "$args"
         header Expected result is:
         puts "$output"
     fi
-    
-    inputs=$(puts "$inputs" | tr -s '[:space:]' ' ')
     
     for file in "$exercise."*; do
     case "${file##*.}" in
@@ -79,9 +77,18 @@ EOF
     fi
 }
 
+exec_lines () {
+    while read -r line; do
+        eval '"$@" '"$line"
+    done << EOF
+$args
+EOF
+}
+
 do_test () {
     start=$(date +%s.%N)
-    eval 'result=$("$@" '"$inputs"')'
+    result=$(exec_lines "$@")
+    #eval 'result=$("$@" '"$inputs"')'
     puts "$result"
     end=$(date +%s.%N)
     runtime=$(printf %s\\n "$end - $start" | bc -l)
@@ -91,6 +98,7 @@ do_test () {
         failure "Program FAILED test in ${runtime}s"
     fi
 }
+
 
 while getopts ql: OPT; do case "$OPT" in
     q) export quiet=1 ;;

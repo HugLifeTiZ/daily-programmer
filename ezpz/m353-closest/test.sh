@@ -1,6 +1,6 @@
 #!/bin/sh
 
-inputs='input1.txt input2.txt input3.txt'
+args='input1.txt input2.txt input3.txt'
 
 output='
 AATATCTACAT
