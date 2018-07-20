@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-inputs=(12 456 4567 butts 12345 1234567891011)
+inputs='12 456 4567 butts 12345 1234567891011'
 
 output='
 7

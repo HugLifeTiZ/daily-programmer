@@ -1,45 +1,61 @@
-#!/bin/bash
+#!/bin/sh
 # Define inputs and output and then source this script in exercise's test.sh.
 # Will compile appropriately, ensure tests passed and measure the program speed.
+set -eu
 
+puts () { printf %s\\n "$*"; }
 header () {
-    echo -e "$(tput bold; tput setaf 6)=> $(tput setaf 7)$*$(tput sgr0)"
+    printf %s\\n "$(tput bold; tput setaf 6)=> $(tput setaf 7)$*$(tput sgr0)"
 }
 success () {
-    echo -e "$(tput bold; tput setaf 2)+++ $(tput setaf 7)$*$(tput sgr0)"
+    printf %s\\n "$(tput bold; tput setaf 2)+++ $(tput setaf 7)$*$(tput sgr0)"
 }
 failure () {
-    echo -e "$(tput bold; tput setaf 1)!!! $(tput setaf 7)$*$(tput sgr0)"
+    printf %s\\n "$(tput bold; tput setaf 1)!!! $(tput setaf 7)$*$(tput sgr0)"
+}
+check_lang () {
+    if [ ! "${lang:-}" ]; then return 0; fi
+    for val in "$@"; do if [ "${lang:-}" = "$val" ]; then return 0; fi; done
+    return 1
 }
 
 run_tests () {
     dirname=$(basename "$PWD")
     exercise=${1:-${dirname##*-}}
-    output=$(tail -n +2 <<< "$output")
+    inputs=$(puts "$inputs" | sed '/./,$!d')
+    output=$(puts "$output" | tac | sed '/./,$!d' | tac | sed '/./,$!d')
     
-    if [[ ! "$quiet" ]]; then
+    if [ ! "${quiet:-}" ]; then
         header Testing "$exercise"
         header Input arguments are:
-        echo "${inputs[@]}"
+        puts "$inputs"
         header Expected result is:
-        cat <<< "$output"
+        puts "$output"
     fi
     
-    for file in $exercise.*; do
+    inputs=$(puts "$inputs" | tr -s '[:space:]' ' ')
+    
+    for file in "$exercise."*; do
     case "${file##*.}" in
-        cr) if [[ ! "$lang" || "$lang" == "cr" || "$lang" == "crystal" ]]; then
+        cr) if check_lang cr crystal; then
             header Building Crystal program
             crystal build -o "crystal.bin" "$file"
             header Testing Crystal program
             do_test "./crystal.bin"
             fi ;;
-        d) if [[ ! "$lang" || "$lang" == "d" ]]; then
+        d) if check_lang d; then
             header Building D program
             ldc2 -of "ldc2.bin" "$file"
             header Testing D program
             do_test "./ldc2.bin"
             fi ;;
-        rb) if [[ ! "$lang" || "$lang" == "rb" || "$lang" == "ruby" ]]; then
+        cs) if check_lang cs csharp; then
+            header Building C\# program
+            mcs -out:cs.exe "$file"
+            header Testing C\# program
+            do_test mono "./cs.exe"
+            fi ;;
+        rb) if check_lang rb ruby; then
             header Testing Ruby program
             do_test ruby "$file"
             fi ;;
@@ -48,24 +64,27 @@ run_tests () {
 }
 
 passed_test () {
-    if [[ "$exact_match" ]]; then
-        [[ "$result" == "$output" ]]
+    if [ "${exact_match:-}" ]; then
+        # shellcheck disable=SC2154
+        [ "$result" = "$output" ]
     else
         # Make sure all the lines in the output are there.
         retval=0
         while read -r line; do
-            if ! grep -Eq -e "$line" <<< "$result"; then retval=1; fi
-        done <<< "$output"
+            if ! puts "$result" | grep -Eq -e "$line"; then retval=1; fi
+        done << EOF
+$output
+EOF
         return "$retval"
     fi
 }
 
 do_test () {
     start=$(date +%s.%N)
-    result=$("$@" "${inputs[@]}")
-    cat <<< "$result"
+    eval 'result=$("$@" '"$inputs"')'
+    puts "$result"
     end=$(date +%s.%N)
-    runtime=$(bc -l <<< "$end - $start")
+    runtime=$(printf %s\\n "$end - $start" | bc -l)
     if passed_test; then
         success "Program passed test in ${runtime}s"
     else
@@ -76,6 +95,7 @@ do_test () {
 while getopts ql: OPT; do case "$OPT" in
     q) export quiet=1 ;;
     l) export lang="$OPTARG" ;;
+    *) true ;;  # Just ignore nonsense options.
 esac; done; shift $((OPTIND - 1))
 
 run_tests "$@"

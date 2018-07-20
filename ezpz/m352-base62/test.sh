@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-inputs=(
+inputs='
     15674
     7026425611433322325
     -55
@@ -9,7 +9,7 @@ inputs=(
     2187521
     balls
     18752
-)
+'
 
 output='
 O44
